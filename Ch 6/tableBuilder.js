@@ -1,4 +1,4 @@
-var mountains = require("./mountains")
+var mountains = require("./mountains");
 
 function rowHeights(rows){
     return rows.map(function(row){
@@ -24,7 +24,7 @@ function drawTable(rows){
     function drawLine(blocks, lineNo){
         return blocks.map(function(block){
             return block[lineNo];
-        }).join("");
+        }).join(" ");
     };
 
     function drawRow(row, rowNum){
@@ -55,7 +55,7 @@ function TextCell(text){
 TextCell.prototype.minWidth = function(){
     return this.text.reduce(function(width, line){
         return Math.max(width, line.length);
-    });
+    }, 0);
 }
 
 TextCell.prototype.minHeight = function(){
@@ -82,21 +82,21 @@ TextCell.prototype.draw = function(width, height){
 // }
 
 function UnderlinedCell(inner){
-    this.inner;
+    this.inner = inner;
 }
 
 UnderlinedCell.prototype.minWidth = function(){
     return this.inner.minWidth();
-}
+};
 
-UnderlinedCell.prototype.minHeight = function(){
+UnderlinedCell.prototype.minHeight = function() {
     return this.inner.minHeight() + 1;
-}
+  };
 
 UnderlinedCell.prototype.draw = function(width, height){
     return this.inner.draw(width, height - 1)
-        .concat([repeat('-', width)]);
-}
+        .concat([repeat("-", width)]);
+};
 
 function dataTable(data){
     var keys = Object.keys(data[0]);
@@ -106,13 +106,16 @@ function dataTable(data){
 
     var body = data.map(function(row){
         return keys.map(function(name){
-            return new TextCell(String(row[name]));
+            var value = row[name];
+            return new TextCell(String(value));
         });
     });
 
     return [headers].concat(body);
+    // return [keys];
+    //return [headers];
 }
 
 // console.log(drawTable(mountains));
-console.log(mountains);
-//console.log(drawTable(dataTable(mountains)));
+// console.log((dataTable(mountains)));
+console.log(drawTable(dataTable(mountains)));
