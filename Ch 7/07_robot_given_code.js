@@ -80,7 +80,7 @@ VillageState.random = function(parcelCount = 5) {
   return new VillageState("Post Office", parcels);
 };
 
-runRobot(VillageState.random(), randomRobot);
+// runRobot(VillageState.random(), randomRobot);
 
 var mailRoute = [
   "Alice's House", "Cabin", "Alice's House", "Bob's House",
@@ -120,3 +120,5 @@ function goalOrientedRobot({place, parcels}, route) {
   }
   return {direction: route[0], memory: route.slice(1)};
 }
+
+runRobot(VillageState.random(), goalOrientedRobot, []);
