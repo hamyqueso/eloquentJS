@@ -59,7 +59,9 @@ let next = first.move("Alice's House");
 // console.log(first.parcels);
 
 function runRobot(state, robot, memory){
+  
   for (let turn = 0;; turn++){
+    // console.log(state);
     if(state.parcels.length == 0){
       // console.log(`Done in ${turn} turns.`);
       return turn;
@@ -68,7 +70,7 @@ function runRobot(state, robot, memory){
     let action = robot(state, memory);
     state = state.move(action.direction);
     memory = action.memory;
-    // console.log(`Moved to ${action.direction}`);
+    // console.log(`------> Moved to ${action.direction}`);
   }
 }
 
@@ -123,11 +125,12 @@ function findRoute(graph, from, to){
       if(!work.some(w => w.at == place)){
         work.push({at: place, route: route.concat(place)});
       }
-    } 
+    }
+    // console.log(work); 
   }
 }
 
-console.log(findRoute(roadGraph, "Cabin", "Farm"));
+// console.log(findRoute(roadGraph, "Cabin", "Farm"));
 
 function goalOrientedRobot({place, parcels}, route){
   if (route.length == 0){
@@ -141,7 +144,7 @@ function goalOrientedRobot({place, parcels}, route){
   return {direction: route[0], memory: route.slice(1)};
 }
 
-// runRobot(VillageState.random(), goalOrientedRobot, []);
+runRobot(VillageState.random(), goalOrientedRobot, []);
 
 function compareRobots(robot1, memory1, robot2, memory2){
   var turn1 = 0;
@@ -160,7 +163,7 @@ function compareRobots(robot1, memory1, robot2, memory2){
   console.log(`Robot 2 took ${turn2} turns.`);
 }
 
-compareRobots(routeRobot, [], goalOrientedRobot, []);
+// compareRobots(routeRobot, [], goalOrientedRobot, []);
 
 // console.log(runRobot(VillageState.random(), goalOrientedRobot, []));
 
@@ -168,14 +171,28 @@ compareRobots(routeRobot, [], goalOrientedRobot, []);
 
 // console.log(state);
 
+function shortestRoute(route1, route2){
+  if (route1.length < route2.length) return route1;
+  else return route2;
+}
+
 function myRobot({place, parcels}, route){
   if (route.length == 0){
-    let parcel = parcels[0];
-    if (parcel.place != place) {
-      route = findRoute(roadGraph, place, parcel.place);
-    } else {
-      route = findRoute(roadGraph, place, parcel.address);
+    let shortest = [];
+    for (let parcel of parcels){
+      if (parcel.place != place) {
+        route = findRoute(roadGraph, place, parcel.place);
+      } else {
+        route = findRoute(roadGraph, place, parcel.address);
+      }
+      if (shortest.length == 0) shortest = route;
+      if (route.length < shortest.length) shortest = route;
     }
+    route = shortest;
   }
   return {direction: route[0], memory: route.slice(1)};
 }
+
+// runRobot(VillageState.random() ,myRobot, []);
+
+compareRobots(myRobot, [], goalOrientedRobot, []);
