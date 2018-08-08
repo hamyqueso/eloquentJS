@@ -8,21 +8,21 @@
 
 class Group{
   constructor(){
-    this.values = [];
+    this.members = [];
   }
 
   add(input){
     if(!this.has(input)){
-      this.values.push(input);
+      this.members.push(input);
       }
   }
 
   has(input){
-    return this.values.includes(input);
+    return this.members.includes(input);
   }
 
   delete(input){
-    this.values = this.values.filter(v => v != input);
+    this.members = this.members.filter(v => v != input);
   }
 
   static from(arr){
@@ -32,10 +32,30 @@ class Group{
     }
     return group;
   }
+
+  [Symbol.iterator](){
+    return new GroupIterator(this);
+  }
   
 }
 
-let myGroup = Group.from([10,20]);
+class GroupIterator{
+  constructor(group){
+    this.group = group;
+    this.position = 0;
+  }
+
+  next(){
+    if (this.position >= this.group.members.length){
+      return {done: true};
+    } else {
+      let result = {value: this.group.members[this.position], done: false};
+      this.postion++;
+      return result;
+    }
+  }
+}
+// let myGroup = Group.from([10,20]);
 
 // myGroup.add(2);
 // myGroup.add(3);
@@ -45,4 +65,8 @@ let myGroup = Group.from([10,20]);
 // myGroup.from([10,20]);
 
 
-console.log(myGroup);
+console.log(Group.from(["a", "b", "c"]));
+
+// for(let value of Group.from(["a", "b", "c"])){
+//   console.log(value);
+// }
