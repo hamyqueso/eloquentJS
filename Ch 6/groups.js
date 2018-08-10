@@ -50,7 +50,7 @@ class GroupIterator{
       return {done: true};
     } else {
       let result = {value: this.group.members[this.position], done: false};
-      this.postion++;
+      this.position++;
       return result;
     }
   }
@@ -65,8 +65,8 @@ class GroupIterator{
 // myGroup.from([10,20]);
 
 
-console.log(Group.from(["a", "b", "c"]));
+// console.log(Group.from(["a", "b", "c"]));
 
-// for(let value of Group.from(["a", "b", "c"])){
-//   console.log(value);
-// }
+for(let value of Group.from(["a", "b", "c"])){
+  console.log(value);
+}
