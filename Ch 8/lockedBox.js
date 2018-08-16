@@ -9,18 +9,24 @@ const box = {
   }
 };
 
-let change = false;
+// let change = false;
 
 function withBoxUnlocked(body) {
   // Your code here.
-  //change = false;
+  let locked = box.locked;
 
-  if(box.locked){
-    box.unlock;
-    change = true;
+  if(!locked){
+    return body();
   }
 
-  body;
+  box.unlock();
+
+  try{
+    return body();
+  } finally {
+    box.lock();
+  }
+
   
 }
 
@@ -34,9 +40,6 @@ try {
   });
 } catch (e) {
   console.log("Error raised:", e);
-} finally{
-  if (change == true);
-  box.lock;
 }
 console.log(box.locked);
 // → true
